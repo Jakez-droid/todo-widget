@@ -6,4 +6,5 @@
     <color name="pill">#E5E3DE</color>
     <color name="accent">#2F6FEB</color>
     <color name="on_accent">#FFFFFF</color>
+    <color name="danger">#D93025</color>
 </resources>

@@ -17,7 +17,7 @@ class TodoWidgetService : RemoteViewsService() {
 
         override fun onCreate() {}
         override fun onDestroy() {}
-        override fun onDataSetChanged() { items = Store.forTab(c, Store.tab(c)) }
+        override fun onDataSetChanged() { Store.purgeOld(c); items = Store.forTab(c, Store.tab(c)) }
         override fun getCount() = items.size
         override fun getLoadingView(): RemoteViews? = null
         override fun getViewTypeCount() = 1
@@ -48,7 +48,10 @@ class TodoWidgetService : RemoteViewsService() {
             v.setViewVisibility(R.id.left, if (showLeft) View.VISIBLE else View.GONE)
             v.setViewVisibility(R.id.right, if (showRight) View.VISIBLE else View.GONE)
 
-            v.setOnClickFillInIntent(R.id.check_area, fill(TodoWidget.OP_TOGGLE, t.id))
+            v.setViewVisibility(R.id.pin, if (t.pinned && !t.done) View.VISIBLE else View.GONE)
+
+            v.setOnClickFillInIntent(R.id.check, fill(TodoWidget.OP_TOGGLE, t.id))
+            v.setOnClickFillInIntent(R.id.text_area, fill(TodoWidget.OP_EDIT, t.id))
             v.setOnClickFillInIntent(R.id.left, fill(TodoWidget.OP_LEFT, t.id))
             v.setOnClickFillInIntent(R.id.right, fill(TodoWidget.OP_RIGHT, t.id))
             return v

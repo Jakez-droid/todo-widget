@@ -13,7 +13,6 @@ class TodoWidget : AppWidgetProvider() {
 
     companion object {
         const val ACTION_TAB = "fr.jakez.todo.TAB"
-        const val ACTION_ITEM = "fr.jakez.todo.ITEM"
         const val ACTION_CLEAR = "fr.jakez.todo.CLEAR"
         const val EXTRA_TAB = "tab"
         const val EXTRA_OP = "op"
@@ -21,11 +20,14 @@ class TodoWidget : AppWidgetProvider() {
         const val OP_TOGGLE = "toggle"
         const val OP_LEFT = "left"
         const val OP_RIGHT = "right"
+        const val OP_EDIT = "edit"
+        const val EXTRA_FROM_WIDGET = "fromWidget"
 
         private val TAB_IDS = intArrayOf(R.id.tab0, R.id.tab1, R.id.tab2)
 
         /** Redessine tous les widgets posés sur l'écran d'accueil. */
         fun refresh(c: Context) {
+            Store.purgeOld(c)
             val mgr = AppWidgetManager.getInstance(c)
             val ids = mgr.getAppWidgetIds(ComponentName(c, TodoWidget::class.java))
             if (ids.isEmpty()) return
@@ -33,12 +35,10 @@ class TodoWidget : AppWidgetProvider() {
             mgr.notifyAppWidgetViewDataChanged(ids, R.id.list)
         }
 
-        private fun broadcast(c: Context, action: String, req: Int, mutable: Boolean = false, extra: Int? = null): PendingIntent {
+        private fun broadcast(c: Context, action: String, req: Int, extra: Int? = null): PendingIntent {
             val i = Intent(c, TodoWidget::class.java).setAction(action)
             if (extra != null) i.putExtra(EXTRA_TAB, extra)
-            val flags = PendingIntent.FLAG_UPDATE_CURRENT or
-                if (mutable) PendingIntent.FLAG_MUTABLE else PendingIntent.FLAG_IMMUTABLE
-            return PendingIntent.getBroadcast(c, req, i, flags)
+            return PendingIntent.getBroadcast(c, req, i, PendingIntent.FLAG_UPDATE_CURRENT or PendingIntent.FLAG_IMMUTABLE)
         }
 
         private fun build(c: Context, widgetId: Int): RemoteViews {
@@ -57,6 +57,7 @@ class TodoWidget : AppWidgetProvider() {
             // Bouton + : ouvre la fenêtre d'ajout, pré-réglée sur l'onglet affiché.
             val add = Intent(c, AddActivity::class.java)
                 .putExtra(EXTRA_TAB, current)
+                .putExtra(EXTRA_FROM_WIDGET, true)
                 .addFlags(Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK)
             v.setOnClickPendingIntent(
                 R.id.btn_add,
@@ -71,7 +72,13 @@ class TodoWidget : AppWidgetProvider() {
             @Suppress("DEPRECATION")
             v.setRemoteAdapter(R.id.list, svc)
             v.setEmptyView(R.id.list, R.id.empty)
-            v.setPendingIntentTemplate(R.id.list, broadcast(c, ACTION_ITEM, 200, mutable = true))
+            // Taps sur une tâche → relais invisible (voir ActionActivity).
+            val action = Intent(c, ActionActivity::class.java)
+                .addFlags(Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_NO_ANIMATION)
+            v.setPendingIntentTemplate(
+                R.id.list,
+                PendingIntent.getActivity(c, 200, action, PendingIntent.FLAG_UPDATE_CURRENT or PendingIntent.FLAG_MUTABLE)
+            )
             return v
         }
     }
@@ -83,15 +90,6 @@ class TodoWidget : AppWidgetProvider() {
         when (intent.action) {
             ACTION_TAB -> Store.setTab(c, intent.getIntExtra(EXTRA_TAB, 0))
             ACTION_CLEAR -> Store.clearDone(c, Store.tab(c))
-            ACTION_ITEM -> {
-                val id = intent.getLongExtra(EXTRA_ID, -1L)
-                if (id < 0) return
-                when (intent.getStringExtra(EXTRA_OP)) {
-                    OP_TOGGLE -> Store.toggle(c, id)
-                    OP_LEFT -> Store.move(c, id, -1)
-                    OP_RIGHT -> Store.move(c, id, +1)
-                }
-            }
             else -> return
         }
         refresh(c)

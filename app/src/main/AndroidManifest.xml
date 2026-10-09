@@ -21,6 +21,15 @@
             </intent-filter>
         </activity>
 
+        <!-- Relais invisible pour les taps sur une tâche -->
+        <activity
+            android:name=".ActionActivity"
+            android:exported="false"
+            android:excludeFromRecents="true"
+            android:noHistory="true"
+            android:taskAffinity=""
+            android:theme="@android:style/Theme.NoDisplay" />
+
         <receiver
             android:name=".TodoWidget"
             android:exported="true"

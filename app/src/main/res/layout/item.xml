@@ -6,8 +6,20 @@
     android:minHeight="52dp"
     android:orientation="horizontal">
 
+    <!-- Rond : zone de tap large pour cocher -->
+    <ImageView
+        android:id="@+id/check"
+        android:layout_width="44dp"
+        android:layout_height="52dp"
+        android:contentDescription="Cocher"
+        android:paddingTop="14dp"
+        android:paddingBottom="14dp"
+        android:paddingEnd="20dp"
+        android:src="@drawable/ic_unchecked" />
+
+    <!-- Texte : tap pour modifier -->
     <LinearLayout
-        android:id="@+id/check_area"
+        android:id="@+id/text_area"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_weight="1"
@@ -17,18 +29,19 @@
         android:paddingEnd="4dp">
 
         <ImageView
-            android:id="@+id/check"
-            android:layout_width="24dp"
-            android:layout_height="24dp"
-            android:contentDescription="Cocher"
-            android:src="@drawable/ic_unchecked" />
+            android:id="@+id/pin"
+            android:layout_width="14dp"
+            android:layout_height="14dp"
+            android:layout_marginEnd="6dp"
+            android:contentDescription="Épinglée"
+            android:src="@drawable/ic_pin"
+            android:visibility="gone" />
 
         <TextView
             android:id="@+id/text"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginStart="14dp"
-            android:maxLines="3"
+                        android:maxLines="3"
             android:ellipsize="end"
             android:textColor="@color/text"
             android:textSize="17sp" />
@@ -37,8 +50,7 @@
             android:id="@+id/text_done"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginStart="14dp"
-            android:maxLines="2"
+                        android:maxLines="2"
             android:ellipsize="end"
             android:textColor="@color/muted"
             android:textSize="17sp"
