@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name">To-do</string>
+    <string name="widget_desc">Ta to-do en onglets : Aujourd\'hui, Semaine, Plus tard</string>
+    <color name="launcher_bg">#2F6FEB</color>
+</resources>

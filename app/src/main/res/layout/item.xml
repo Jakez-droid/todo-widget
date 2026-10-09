@@ -1,0 +1,63 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:gravity="center_vertical"
+    android:minHeight="52dp"
+    android:orientation="horizontal">
+
+    <LinearLayout
+        android:id="@+id/check_area"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_weight="1"
+        android:gravity="center_vertical"
+        android:minHeight="52dp"
+        android:orientation="horizontal"
+        android:paddingEnd="4dp">
+
+        <ImageView
+            android:id="@+id/check"
+            android:layout_width="24dp"
+            android:layout_height="24dp"
+            android:contentDescription="Cocher"
+            android:src="@drawable/ic_unchecked" />
+
+        <TextView
+            android:id="@+id/text"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="14dp"
+            android:maxLines="3"
+            android:ellipsize="end"
+            android:textColor="@color/text"
+            android:textSize="17sp" />
+
+        <TextView
+            android:id="@+id/text_done"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="14dp"
+            android:maxLines="2"
+            android:ellipsize="end"
+            android:textColor="@color/muted"
+            android:textSize="17sp"
+            android:visibility="gone" />
+    </LinearLayout>
+
+    <ImageView
+        android:id="@+id/left"
+        android:layout_width="40dp"
+        android:layout_height="44dp"
+        android:contentDescription="Avancer"
+        android:padding="11dp"
+        android:src="@drawable/ic_left" />
+
+    <ImageView
+        android:id="@+id/right"
+        android:layout_width="40dp"
+        android:layout_height="44dp"
+        android:contentDescription="Repousser"
+        android:padding="11dp"
+        android:src="@drawable/ic_right" />
+</LinearLayout>
